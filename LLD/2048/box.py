@@ -86,6 +86,7 @@ class Box:
                 if self.box[i][j]!="_":
                     if last and last == self.box[i][j]:
                         self.box[i][lasty] *= 2
+                        self.max = max(self.max,self.box[i][lasty])
                         self.box[i][j]="_"
                         last,lasty = None,None
                     else:
