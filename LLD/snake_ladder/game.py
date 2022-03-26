@@ -29,7 +29,6 @@ class Game:
 
     def check_and_update_player_status(self,player):
         if player.cur_position==self.board.size:
-            import pdb;pdb.set_trace()
             self.winners.append(player)
             player.update_rank(len(self.winners))
             self.active_players_count-=1
