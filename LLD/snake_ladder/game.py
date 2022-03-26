@@ -17,18 +17,10 @@ class Game:
     def add_player(self):
         name = input("Name of Player:    ")
         self.players.append(Player(name))
-        
-    def roll_dice(self):
-        count = 0
-        count_per_dice = []
-        for _ in range(self.dices):
-            rand = random.choice(DICE_CHOICES)
-            count_per_dice.append(rand)
-            count+=rand
-        return count,count_per_dice
 
     def check_and_update_player_status(self,player):
         if player.cur_position==self.board.size:
+            print("******** Congrats {}  ********".format(player.name))
             self.winners.append(player)
             player.update_rank(len(self.winners))
             self.active_players_count-=1
@@ -53,8 +45,7 @@ class Game:
         while not self.game_over():
             self.print_game()
             player = self.get_turn_player()
-            input("Hey {}! Press any key to roll dice(s). ".format(player.name))
-            count,count_presentation = self.roll_dice()
+            count,count_presentation = player.roll_dice(self.dices)
             print("Dice result: {}".format(count_presentation))
             self.move_player(player,count)
         self.print_result()
