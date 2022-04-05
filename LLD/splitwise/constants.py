@@ -1,0 +1,2 @@
+OWES = "owes"
+LENTS = "lents"
