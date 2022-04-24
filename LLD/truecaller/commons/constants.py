@@ -1,0 +1,1 @@
+WORD_END_CHAR = "$"
