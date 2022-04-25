@@ -53,16 +53,16 @@ class UserGraphService(object):
             return None
         if source_key is dest_key:
             return [source_key]
-        prev_node_keys = self._shortest_path(source_key, dest_key)
-        if prev_node_keys is None:
+        parent_of_nodes = self._shortest_path(source_key, dest_key)
+        if parent_of_nodes is None:
             return None
         else:
             # Iterate through the path_ids backwards, starting at dest_key
             path_ids = [dest_key]
-            prev_node_key = prev_node_keys[dest_key]
-            while prev_node_key is not None:
-                path_ids.append(prev_node_key)
-                prev_node_key = prev_node_keys[prev_node_key]
+            parent_of_node = parent_of_nodes[dest_key]
+            while parent_of_node is not None:
+                path_ids.append(parent_of_node)
+                parent_of_node = parent_of_nodes[parent_of_node]
             # Reverse the list since we iterated backwards
             return path_ids[::-1]
 
@@ -73,9 +73,9 @@ class UserGraphService(object):
         from collections import deque
         queue = deque()
         queue.append(source)
-        # prev_node_keys keeps track of each hop from
+        # parent_of_nodes keeps track of each hop from
         # the source_key to the dest_key
-        prev_node_keys = {source_key: None}
+        parent_of_nodes = {source_key: None}
         # We'll use visited_ids to keep track of which nodes we've
         # visited, which can be different from a typical bfs where
         # this can be stored in the node itself
@@ -84,12 +84,12 @@ class UserGraphService(object):
         while queue:
             node = queue.popleft()
             if node.key is dest_key:
-                return prev_node_keys
+                return parent_of_nodes
             prev_node = node
             for friend_id in node.friend_ids:
                 if friend_id not in visited_ids:
                     friend_node = self.get_person_with_person_id(friend_id)
                     queue.append(friend_node)
-                    prev_node_keys[friend_id] = prev_node.key
+                    parent_of_nodes[friend_id] = prev_node.key
                     visited_ids.add(friend_id)
         return None
